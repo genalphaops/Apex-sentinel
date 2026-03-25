@@ -1,116 +1,123 @@
 import streamlit as st
 import requests
 import json
-import time
 
-# --- 1. APEX NEON CORE (THE LOOK) ---
-st.set_page_config(page_title="APEX OMNI V15", page_icon="⚡", layout="wide")
+# --- 1. THE NVIDIA ARCHITECTURE (BLACK & LIME GREEN) ---
+st.set_page_config(page_title="APEX OMNI RTX", page_icon="💚", layout="wide")
 
 st.markdown("""
     <style>
-    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&family=Rajdhani:wght@500;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@700&family=Source+Code+Pro:wght@400;900&display=swap');
     
     .stApp {
-        background: radial-gradient(circle at top, #001220 0%, #000000 100%);
-        color: #00d2ff;
-        font-family: 'Rajdhani', sans-serif;
+        background-color: #0b0b0b;
+        color: #76b900; /* NVIDIA GREEN */
+        font-family: 'Source Code Pro', monospace;
     }
-    
-    /* THE GHOST LOGO */
-    .logo {
-        font-family: 'Orbitron', sans-serif;
-        font-weight: 900;
-        font-size: 3rem;
-        text-align: center;
-        background: linear-gradient(to bottom, #00d2ff, #3a7bd5);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        text-shadow: 0 10px 20px rgba(0, 210, 255, 0.3);
+
+    /* THE FOUNDER'S LOGO */
+    .rtx-header {
+        font-family: 'Roboto Condensed', sans-serif;
+        font-weight: 700;
+        font-size: 3.5rem;
+        letter-spacing: -1px;
+        color: #ffffff;
+        text-align: left;
+        border-left: 8px solid #76b900;
+        padding-left: 20px;
         margin-bottom: 0px;
+        text-transform: uppercase;
     }
 
-    /* GLASS-MORPHISM MODULES */
-    .module-box {
-        background: rgba(255, 255, 255, 0.03);
-        border: 1px solid rgba(0, 210, 255, 0.2);
-        padding: 25px;
-        border-radius: 24px;
-        backdrop-filter: blur(15px);
-        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8);
-        margin-top: 20px;
+    /* TITANIUM MODULES */
+    .gpu-card {
+        background: linear-gradient(145deg, #1a1a1a, #000000);
+        border: 1px solid #333333;
+        padding: 30px;
+        border-radius: 4px; /* Sharp, professional corners */
+        box-shadow: 10px 10px 20px #050505, -5px -5px 15px #1a1a1a;
+        margin-bottom: 25px;
     }
 
-    /* THE ADDICTIVE BUTTON */
+    /* THE 'FORCE' BUTTON */
     .stButton>button {
         width: 100%;
-        background: linear-gradient(45deg, #00d2ff, #0052d4);
-        color: white;
+        background-color: #76b900;
+        color: black;
         border: none;
-        border-radius: 15px;
-        padding: 18px;
-        font-family: 'Orbitron', sans-serif;
-        font-size: 1.1rem;
-        transition: 0.4s;
-        box-shadow: 0 0 20px rgba(0, 210, 255, 0.4);
+        border-radius: 2px;
+        padding: 15px;
+        font-family: 'Roboto Condensed', sans-serif;
+        font-weight: 900;
+        font-size: 1.2rem;
+        transition: 0.3s;
+        text-transform: uppercase;
     }
     .stButton>button:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 0 40px #00d2ff;
+        background-color: #ffffff;
+        color: #000000;
+        box-shadow: 0 0 30px rgba(118, 185, 0, 0.6);
+    }
+
+    /* INPUT OVERRIDE */
+    input, textarea {
+        background-color: #111 !important;
+        color: #fff !important;
+        border: 1px solid #76b900 !important;
     }
     </style>
     """, unsafe_allow_html=True)
 
-# --- 2. THE NEURAL LINK (GEMINI FLASH 2.0) ---
-def apex_brain(prompt, persona):
+# --- 2. THE CORE KERNEL (API) ---
+def compute_engine(query, system_prompt):
     try:
         api_key = st.secrets["OPENROUTER_API_KEY"]
         headers = {"Authorization": f"Bearer {api_key}"}
         payload = {
             "model": "google/gemini-2.0-flash-exp:free",
-            "messages": [
-                {"role": "system", "content": persona},
-                {"role": "user", "content": prompt}
-            ]
+            "messages": [{"role": "system", "content": system_prompt}, {"role": "user", "content": query}]
         }
         r = requests.post("https://openrouter.ai/api/v1/chat/completions", headers=headers, data=json.dumps(payload))
         return r.json()['choices'][0]['message']['content']
     except:
-        return "⚠️ SIGNAL LOST. RECONNECTING TO PUNE GHOST NODE..."
+        return "ERROR: SYSTEM THERMAL THROTTLING. RECONNECTING..."
 
-# --- 3. THE INTERFACE ---
-st.markdown("<h1 class='logo'>APEX OMNI V15</h1>", unsafe_allow_html=True)
-st.markdown("<p style='text-align:center; color:#aaa;'>The 1% Advantage. Developed for the Elite.</p>", unsafe_allow_html=True)
+# --- 3. THE CONTROL PANEL ---
+st.markdown("<h1 class='rtx-header'>APEX OMNI <span style='color:#76b900;'>RTX</span></h1>", unsafe_allow_html=True)
+st.markdown("<p style='color:#555; margin-left:30px;'>GEFORCE ACADEMIC SERIES | PUNE DISTRO</p>", unsafe_allow_html=True)
 
-# DASHBOARD STATS
-c1, c2, c3 = st.columns(3)
-with c1: st.markdown("🏆 **RANK:** #1 PUNE")
-with c2: st.markdown("🔥 **STREAK:** 5 DAYS")
-with c3: st.markdown("🔋 **AI POWER:** 100%")
+st.divider()
 
-# MODULE SELECTION
-choice = st.selectbox("", ["🎯 THE PAPER CRUSHER", "⚽ ISAGI AI TUTOR", "🔓 UNLOCK PRO ACCESS"])
+# STATS BAR
+c1, c2, c3, c4 = st.columns(4)
+c1.metric("CORE CLOCK", "5.2 GHz")
+c2.metric("MEMORY", "16 GB")
+c3.metric("STREAK", "🔥 7")
+c4.metric("TEMP", "OPTIMAL")
 
-if choice == "🎯 THE PAPER CRUSHER":
-    st.markdown("<div class='module-box'><h3>🎯 Paper Crusher</h3><p>Paste your textbook notes. I will give you the 3 points that will be in the exam.</p></div>", unsafe_allow_html=True)
-    txt = st.text_area("Input Paragraph:", height=200, placeholder="Paste your text here...")
-    if st.button("DESTROY PAPER"):
-        with st.spinner("Crushing..."):
-            ans = apex_brain(txt, "You are an Exam Specialist. Give 3 short bullet points a 6th grader can memorize instantly. Use emojis.")
-            st.info(ans)
+st.divider()
 
-elif choice == "⚽ ISAGI AI TUTOR":
-    st.markdown("<div class='module-box'><h3>⚽ Egoist Tutor</h3><p>Learn Math & Science like a Blue Lock striker.</p></div>", unsafe_allow_html=True)
-    topic = st.text_input("What is your doubt?")
-    if st.button("AWAKEN EGO"):
-        with st.spinner("Analyzing Field..."):
-            ans = apex_brain(topic, "You are Isagi Yoichi. Explain this study concept like a soccer strategy. Be intense and helpful.")
+# MODULES
+choice = st.radio("SELECT MODE", ["OVERCLOCK (SOLVER)", "RAY-TRACING (TUTOR)", "LICENSE (PRO)"])
+
+if choice == "OVERCLOCK (SOLVER)":
+    st.markdown("<div class='gpu-card'><h3>[ FAST SOLVE MODE ]</h3><p>Deconstruct exam papers with 0ms latency.</p></div>", unsafe_allow_html=True)
+    task = st.text_area("LOAD DATA:")
+    if st.button("RENDER SOLUTION"):
+        with st.status("Computing via NVIDIA Kernels..."):
+            ans = compute_engine(task, "You are a high-performance exam solver. Solve this Grade 6 question perfectly. Bold the final result.")
             st.success(ans)
 
-elif choice == "🔓 UNLOCK PRO ACCESS":
-    st.markdown("<div class='module-box' style='border-color: #ffd700;'><h2>💎 APEX PRO</h2><p>Unlimited searches + 24/7 Exam Support.</p><h3>Pay ₹49 to: <code>apex.pune@upi</code></h3><p>Send screenshot to CEO to activate.</p></div>", unsafe_allow_html=True)
+elif choice == "RAY-TRACING (TUTOR)":
+    st.markdown("<div class='gpu-card'><h3>[ VISUAL LOGIC MODE ]</h3><p>Trace the logic of any concept back to its source.</p></div>", unsafe_allow_html=True)
+    concept = st.text_input("QUERY CONCEPT:")
+    if st.button("TRACE LOGIC"):
+        with st.spinner("Ray-tracing concept pathways..."):
+            ans = compute_engine(concept, "Explain this Grade 6 NCERT concept with ultra-clear logic and professional examples.")
+            st.info(ans)
 
-# --- 4. GUEST LOCK ---
+elif choice == "LICENSE (PRO)":
+    st.markdown("<div class='gpu-card' style='border-color: #ffffff;'><h2>ACTIVATE FULL LICENSE</h2><p>Unlock Ray-Tracing and Overclock limits.</p><h3>TRANSFER ₹49 TO: <code>apex.pune@upi</code></h3></div>", unsafe_allow_html=True)
+
 st.divider()
-st.caption("Ghost Network v15.0 | Secure Node: Pune-Maharashtra")
-
-        
+st.caption("Powered by APEX NVIDIA-STREAMS | Version 18.0.4")
